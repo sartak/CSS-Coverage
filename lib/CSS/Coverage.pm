@@ -1,7 +1,16 @@
 package CSS::Coverage;
 use Moose;
 use CSS::SAC;
-use CSS::Coverage::Deparse;
+use CSS::Coverage::Document;
+
+with 'CSS::Coverage::DocumentDelegate';
+
+has sac_document => (
+    is      => 'ro',
+    isa     => 'CSS::Coverage::Document',
+    default => sub { CSS::Coverage::Document->new(delegate => shift) },
+    lazy    => 1,
+);
 
 has css_filename => (
     is       => 'ro',
@@ -15,39 +24,18 @@ has html_filenames => (
     required => 1,
 );
 
-has deparser => (
-    is      => 'bare',
-    isa     => 'CSS::Coverage::Deparse',
-    default => sub { CSS::Coverage::Deparse->new },
-    handles => ['stringify_selector'],
-);
-
-sub comment {
-    my ($self, $comment) = @_;
-    if ($comment =~ /coverage:(dynamic|ignore)/i) {
-    }
-}
-
-sub end_selector {
-    my ($self, $selectors) = @_;
-
-    for my $parsed_selector (@$selectors) {
-        my $selector = $self->stringify_selector($parsed_selector);
-
-        print "$selector\n";
-    }
-
-    print "\n";
-}
-
 sub check {
     my $self = shift;
 
     my $sac = CSS::SAC->new({
-        DocumentHandler => $self,
+        DocumentHandler => $self->sac_document,
     });
 
-    $sac->parse({ filename => $self->css_file });
+    $sac->parse({ filename => $self->css_filename });
+}
+
+sub _check_selector {
+    my ($self, $selector) = @_;
 }
 
 __PACKAGE__->meta->make_immutable;
