@@ -13,7 +13,12 @@ my $coverage = CSS::Coverage->new(
 );
 
 my $report = $coverage->check;
+my @selectors = $report->unmatched_selectors;
+exit 0 if !@selectors;
 
-for my $selector ($report->unmatched_selectors) {
-    print "$selector\n";
+print "Unmatched selectors (" . scalar(@selectors) . "):\n";
+for my $selector (@selectors) {
+    print "  $selector\n";
 }
+exit 1;
+
