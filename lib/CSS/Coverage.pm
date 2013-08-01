@@ -133,7 +133,7 @@ __END__
 
 =head1 NAME
 
-CSS::Coverage
+CSS::Coverage - Confirm that your CSS matches your DOM
 
 =head1 SYNOPSIS
 
