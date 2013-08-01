@@ -17,7 +17,7 @@ has deparser => (
 
 sub comment {
     my ($self, $comment) = @_;
-    if ($comment =~ /coverage:(\w+)/i) {
+    if ($comment =~ /coverage\s*:\s*(\w+)/i) {
         $self->_got_coverage_comment($1);
     }
 }
