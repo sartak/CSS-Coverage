@@ -2,6 +2,7 @@ package CSS::Coverage;
 use Moose;
 use CSS::SAC;
 use CSS::Coverage::Document;
+use CSS::Coverage::XPath;
 
 with 'CSS::Coverage::DocumentDelegate';
 
@@ -36,6 +37,7 @@ sub check {
 
 sub _check_selector {
     my ($self, $selector) = @_;
+    my $xpath = CSS::Coverage::XPath->new($selector)->to_xpath;
 }
 
 sub _got_coverage_directive {
