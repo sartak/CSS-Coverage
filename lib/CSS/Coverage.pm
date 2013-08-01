@@ -3,6 +3,7 @@ use Moose;
 use CSS::SAC;
 use CSS::Coverage::Document;
 use CSS::Coverage::XPath;
+use HTML::TreeBuilder::XPath;
 
 with 'CSS::Coverage::DocumentDelegate';
 
@@ -25,6 +26,26 @@ has html_filenames => (
     required => 1,
 );
 
+has html_trees => (
+    is      => 'ro',
+    isa     => 'ArrayRef',
+    builder => '_build_html_trees',
+    lazy    => 1,
+);
+
+sub _build_html_trees {
+    my $self = shift;
+    my @trees;
+
+    for my $filename (@{ $self->html_filenames}) {
+        my $tree = HTML::TreeBuilder::XPath->new;
+        $tree->parse_file($filename);
+        push @trees, $tree;
+    }
+
+    return \@trees;
+}
+
 sub check {
     my $self = shift;
 
@@ -38,6 +59,14 @@ sub check {
 sub _check_selector {
     my ($self, $selector) = @_;
     my $xpath = CSS::Coverage::XPath->new($selector)->to_xpath;
+
+    for my $tree (@{ $self->html_trees }) {
+        if ($tree->exists($xpath)) {
+            return;
+        }
+    }
+
+    warn "This selector matches no documents: $selector\n";
 }
 
 sub _got_coverage_directive {
