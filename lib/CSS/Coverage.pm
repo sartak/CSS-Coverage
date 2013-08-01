@@ -38,10 +38,10 @@ sub _check_selector {
     my ($self, $selector) = @_;
 }
 
-sub _got_coverage_comment {
-    my ($self, $comment) = @_;
+sub _got_coverage_directive {
+    my ($self, $directive) = @_;
 
-    if ($comment eq 'dynamic' || $comment eq 'ignore') {
+    if ($directive eq 'dynamic' || $directive eq 'ignore') {
     }
 }
 
