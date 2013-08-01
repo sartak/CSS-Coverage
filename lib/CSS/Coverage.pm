@@ -153,7 +153,26 @@ CSS::Coverage
 
     print for $report->unmatched_selectors;
 
-=head1 Attributes
+=head1 DESCRIPTION
+
+It is very tedious to manually confirm whether a particular CSS
+selector matches any of your documents. There are browser-based
+tools, like one that ships in Chrome, that do this for you. However,
+they do not presently check multiple pages. Browser tools are also
+not great for running in a continuous integration environment.
+
+This module provides a good first stab at paring down the list of
+rules to manually check.
+
+If you know that a particular rule only matches in the presence of
+a dynamically-modified DOM, via JavaScript, you can add a comment
+like this either inside or before that CSS rule:
+
+    /* coverage: dynamic */
+
+This will cause CSS::Coverage to skip that rule.
+
+=head1 ATTRIBUTES
 
 =head2 css (Str|ScalarRef)
 
@@ -163,7 +182,7 @@ If given a string, C<css> is treated as a filename. If given as a scalar referen
 
 A list of HTML documents. For each document, strings are treated as filenames; scalar reference as raw HTML code.
 
-=head1 API
+=head1 METHODS
 
 =head2 check
 
