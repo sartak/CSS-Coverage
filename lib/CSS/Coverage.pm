@@ -8,13 +8,6 @@ use HTML::TreeBuilder::XPath;
 
 with 'CSS::Coverage::DocumentDelegate';
 
-has sac_document => (
-    is      => 'ro',
-    isa     => 'CSS::Coverage::Document',
-    default => sub { CSS::Coverage::Document->new(delegate => shift) },
-    lazy    => 1,
-);
-
 has css_filename => (
     is       => 'ro',
     isa      => 'Str',
@@ -31,6 +24,13 @@ has html_trees => (
     is      => 'ro',
     isa     => 'ArrayRef',
     builder => '_build_html_trees',
+    lazy    => 1,
+);
+
+has _sac_document => (
+    is      => 'ro',
+    isa     => 'CSS::Coverage::Document',
+    default => sub { CSS::Coverage::Document->new(delegate => shift) },
     lazy    => 1,
 );
 
@@ -58,7 +58,7 @@ sub check {
     my $self = shift;
 
     my $sac = CSS::SAC->new({
-        DocumentHandler => $self->sac_document,
+        DocumentHandler => $self->_sac_document,
     });
 
     my $report = CSS::Coverage::Report->new;
@@ -70,6 +70,8 @@ sub check {
 
     return $report;
 }
+
+# -- CSS::Coverage::DocumentDelegate
 
 sub _check_selector {
     my ($self, $selector) = @_;
