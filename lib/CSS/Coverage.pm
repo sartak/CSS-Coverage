@@ -39,6 +39,7 @@ sub _build_html_trees {
 
     for my $filename (@{ $self->html_filenames}) {
         my $tree = HTML::TreeBuilder::XPath->new;
+        $tree->ignore_unknown(0);
         $tree->parse_file($filename);
         push @trees, $tree;
     }
