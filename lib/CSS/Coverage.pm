@@ -40,6 +40,12 @@ has _report => (
     clearer => '_clear_report',
 );
 
+has _ignore_next_rule => (
+    is      => 'rw',
+    isa     => 'Bool',
+    default => 0,
+);
+
 sub _build_html_trees {
     my $self = shift;
     my @trees;
@@ -89,6 +95,12 @@ sub check {
 
 sub _check_selector {
     my ($self, $selector) = @_;
+
+    if ($self->_ignore_next_rule) {
+        $self->_ignore_next_rule(0);
+        return;
+    }
+
     my $xpath = CSS::Coverage::XPath->new($selector)->to_xpath;
 
     for my $tree (@{ $self->html_trees }) {
@@ -109,6 +121,7 @@ sub _got_coverage_directive {
     my ($self, $directive) = @_;
 
     if ($directive eq 'dynamic' || $directive eq 'ignore') {
+        $self->_ignore_next_rule(1);
     }
 }
 
