@@ -3,13 +3,13 @@ use Moose;
 use CSS::SAC;
 use CSS::Coverage::Deparse;
 
-has css_file => (
+has css_filename => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
-has html_files => (
+has html_filenames => (
     is       => 'ro',
     isa      => 'ArrayRef[Str]',
     required => 1,
