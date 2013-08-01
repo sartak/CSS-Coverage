@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use CSS::Coverage;
+
+@ARGV >= 2 or die "usage: $0 foo.css bar.html[, baz.html ...]\n";
+
+my ($css_file, @html_files) = @ARGV;
+
+my $coverage = CSS::Coverage->new(
+    css_file   => $css_file,
+    html_files => \@html_files,
+);
+
+$coverage->check;
+
