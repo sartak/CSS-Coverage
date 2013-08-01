@@ -18,7 +18,7 @@ has deparser => (
 sub comment {
     my ($self, $comment) = @_;
     if ($comment =~ /coverage\s*:\s*(\w+)/i) {
-        $self->_got_coverage_directive($1);
+        $self->delegate->_got_coverage_directive($1);
     }
 }
 
