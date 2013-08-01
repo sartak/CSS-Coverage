@@ -128,3 +128,46 @@ sub _got_coverage_directive {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__END__
+
+=head1 NAME
+
+CSS::Coverage
+
+=head1 SYNOPSIS
+
+    css-coverage style.css index.html second.html
+        Unmatched selectors (3):
+            div.form-actions button:first-child
+            .expanded span.open
+            ul.attn li form textarea
+
+
+    my $coverage = CSS::Coverage->new(
+        css       => $css_file,
+        documents => \@html_files,
+    );
+
+    my $report = $coverage->check;
+
+    print for $report->unmatched_selectors;
+
+=head1 Attributes
+
+=head2 css (Str|ScalarRef)
+
+If given a string, C<css> is treated as a filename. If given as a scalar reference, C<css> is treated as CSS code.
+
+=head2 documents (ArrayRef[Str|ScalarRef])
+
+A list of HTML documents. For each document, strings are treated as filenames; scalar reference as raw HTML code.
+
+=head1 API
+
+=head2 check
+
+Runs a coverage check of the given CSS against the given documents. Returns a L<CSS::Coverage::Report> object.
+
+=cut
+
