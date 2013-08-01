@@ -12,5 +12,8 @@ my $coverage = CSS::Coverage->new(
     html_filenames => \@html_files,
 );
 
-$coverage->check;
+my $report = $coverage->check;
 
+for my $selector ($report->unmatched_selectors) {
+    print "$selector\n";
+}
