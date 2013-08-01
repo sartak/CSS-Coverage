@@ -17,7 +17,8 @@ has deparser => (
 
 sub comment {
     my ($self, $comment) = @_;
-    if ($comment =~ /coverage:(dynamic|ignore)/i) {
+    if ($comment =~ /coverage:(\w+)/i) {
+        $self->_got_coverage_comment($1);
     }
 }
 
@@ -33,7 +34,7 @@ sub end_selector {
 package CSS::Coverage::DocumentDelegate;
 use Moose::Role;
 
-requires '_check_selector';
+requires '_check_selector', '_got_coverage_comment';
 
 1;
 

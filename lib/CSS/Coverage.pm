@@ -38,6 +38,13 @@ sub _check_selector {
     my ($self, $selector) = @_;
 }
 
+sub _got_coverage_comment {
+    my ($self, $comment) = @_;
+
+    if ($comment eq 'dynamic' || $comment eq 'ignore') {
+    }
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
