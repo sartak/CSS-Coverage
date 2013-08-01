@@ -8,8 +8,8 @@ use CSS::Coverage;
 my ($css_file, @html_files) = @ARGV;
 
 my $coverage = CSS::Coverage->new(
-    css_filename   => $css_file,
-    html_filenames => \@html_files,
+    css       => $css_file,
+    documents => \@html_files,
 );
 
 my $report = $coverage->check;

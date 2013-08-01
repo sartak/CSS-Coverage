@@ -8,15 +8,15 @@ use HTML::TreeBuilder::XPath;
 
 with 'CSS::Coverage::DocumentDelegate';
 
-has css_filename => (
+has css => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => 'Str|ScalarRef',
     required => 1,
 );
 
-has html_filenames => (
+has documents => (
     is       => 'ro',
-    isa      => 'ArrayRef[Str]',
+    isa      => 'ArrayRef[Str|ScalarRef]',
     required => 1,
 );
 
@@ -44,10 +44,18 @@ sub _build_html_trees {
     my $self = shift;
     my @trees;
 
-    for my $filename (@{ $self->html_filenames}) {
+    for my $document (@{ $self->documents }) {
         my $tree = HTML::TreeBuilder::XPath->new;
         $tree->ignore_unknown(0);
-        $tree->parse_file($filename);
+
+        if (ref($document)) {
+            $tree->parse($$document);
+            $tree->eof;
+        }
+        else {
+            $tree->parse_file($document);
+        }
+
         push @trees, $tree;
     }
 
@@ -64,7 +72,13 @@ sub check {
     my $report = CSS::Coverage::Report->new;
     $self->_report($report);
 
-    $sac->parse({ filename => $self->css_filename });
+    my $css = $self->css;
+    if (ref($css)) {
+        $sac->parse({ string => $$css });
+    }
+    else {
+        $sac->parse({ filename => $css });
+    }
 
     $self->_clear_report;
 
