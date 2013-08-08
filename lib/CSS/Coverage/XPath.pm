@@ -6,6 +6,9 @@ use base 'HTML::Selector::XPath';
 our %PASSTHRU = map { $_ => 1 } qw/
     hover
     link
+    visited
+    active
+    focus
 /;
 
 sub parse_pseudo {
