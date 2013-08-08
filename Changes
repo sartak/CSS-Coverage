@@ -1,4 +1,7 @@
-0.03  2013-08-8
+0.04  2013-08-08
+    handle :visited :focus :active too
+
+0.03  2013-08-08
     handle :link properly
 
 0.02  2013-08-02
